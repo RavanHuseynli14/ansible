@@ -1,0 +1,9 @@
+---
+
+- hosts: all
+  become: true
+  tasks: 
+
+  - name: htop packet install
+    dnf:
+      name: htop-3.3.0-5.el10_0.x86_64 
