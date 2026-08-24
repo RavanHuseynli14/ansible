@@ -1,0 +1,10 @@
+---
+
+- hosts: all
+  become: true
+  tasks:
+
+  - name: php install
+    dnf:
+      name: php
+    when: ansible_distribution_version == "10.1" and ansible_distribution in ["Fedora", "CentOS", "RedHat"]
