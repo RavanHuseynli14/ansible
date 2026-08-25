@@ -1,0 +1,23 @@
+---
+
+- hosts: all
+  become: true
+  tasks: 
+
+  - name: httpd_package install
+    dnf:
+      name: httpd
+    when: ansible_distrubution in ["RedHat", "CentOS", "Fedora"]
+
+  - name: php_package install
+    dnf:
+      name: php
+
+  - name: apache2_package_install
+    apt:
+      name: apacke2
+
+  - name: libapache2-mod-php install
+    apt:
+      name: libapache2-mod-php
+    when: ansible_distrubution == "Ubuntu"   
