@@ -1,12 +1,66 @@
 ---
 
-- hosts: all
+- hosts: all 
+  become: true
+  pre_tasks:
+  
+  - name: update (RedHat)
+    dnf:
+      update_only: yes
+      update_cache: yes
+    when: ansible_distribution == "RedHat"
+
+
+  - name: update (Ubuntu)
+    apt:
+      upgrade: dist 
+      update_cache: yes
+    when: ansible_distribution == "Ubuntu"
+
+
+- hosts: web_servers
   become: true
   tasks: 
 
-  - name: httpd_package install
+  - name: httpd install
     package:
       name:
         - httpd
-        - php
-    when: ansible_distrubution in ["RedHat", "CentOS", "Fedora"]
+    when: ansible_distribution == "RedHat"
+
+- hosts: db_servers
+  become: true
+  tasks:
+    
+  - name: install mariadb for RedHat
+    dnf:
+      name: mariadb 
+      state: latest
+    when: ansible_distribution == "RedHat"
+
+
+  - name: mariadb for Ubuntu
+    apt:
+      name: mariadb-server
+      state: latest
+    when: ansible_distribution == "Ubuntu"
+
+- hosts: file_servers
+  become: true
+  tasks:
+
+  - name: install samba for "RedHat" and "Ubuntu
+    package:
+      name: samba
+    when: ansible_distribution in ["RedHat", "Ubuntu"]
+
+
+
+
+
+
+
+
+
+
+
