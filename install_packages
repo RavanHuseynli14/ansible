@@ -30,7 +30,18 @@
         - httpd
     when: ansible_distribution == "RedHat"
 
-- hosts: db_servers
+
+  - name: default_site.html
+    tags: site
+    copy:
+      src: default_site.html
+      dest: /var/www/html/index.html
+      owner: root
+      group: root 
+      mode: 0644
+
+
+- hosts: db_servers   
   become: true
   tasks:
     
