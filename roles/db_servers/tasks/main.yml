@@ -1,0 +1,26 @@
+  - name: install mariadb for RedHat
+    tags: Rmariadb
+    dnf:
+      name: mariadb
+      state: latest
+    when: ansible_distribution == "RedHat"
+
+
+  - name: mariadb for Ubuntu
+    tags: Umariadb
+    apt:
+      name: mariadb-server
+      state: latest
+    when: ansible_distribution == "Ubuntu"
+
+- hosts: file_servers
+  become: true
+  tasks:
+
+  - name: install samba for "RedHat" and "Ubuntu
+    tags: Samba
+    package:
+      name: samba
+    when: ansible_distribution in ["RedHat", "Ubuntu"]
+
+

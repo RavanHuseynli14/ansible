@@ -1,0 +1,27 @@
+  - name: httpd install
+    tags: web
+    package:
+      name:
+        - httpd
+    when: ansible_distribution == "RedHat"
+
+
+  - name: default_site.html
+    tags: site
+    copy:
+      src: default_site.html
+      dest: /var/www/html/index.html
+      owner: root
+      group: root
+      mode: 0644
+
+  - name: ServerAdmin
+    tags: lineinfile
+    lineinfile:
+      path: /etc/httpd/conf/httpd.conf
+      regexp: '^ServerAdmin'
+      line: ServerAdmin rhuseynli@Server1
+    when: ansible_distribution == "RedHat"
+    register: httpd
+
+
