@@ -1,0 +1,15 @@
+---
+
+- hosts: web_servers
+  become: true
+  tasks:
+
+  - name: new user docker
+    user:
+      name: docker
+      group: root
+  - name: ssh
+    tags: ssh
+    authorized_key:
+      user: docker
+      key: ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGrJPWP/8bWbJUD/fMl/RtRtTsowELq8q4Ykx3hxIwsZ ansible

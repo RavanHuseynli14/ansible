@@ -33,7 +33,7 @@
     tags: always
     authorized_key:
       user: simone
-      key:ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGrJPWP/8bWbJUD/fMl/RtRtTsowELq8q4Ykx3hxIwsZ ansible
+      key: ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGrJPWP/8bWbJUD/fMl/RtRtTsowELq8q4Ykx3hxIwsZ ansible
 
   - name: add sudoers for simone
     tags: always
@@ -42,74 +42,22 @@
       dest: /etc/sudoers.d/simone
       owner: root
       group: root 
-      mode: 0440 
+      mode: 0440
+
+- hosts: workstations
+  become: true
+  roles:
+    - workstations
+
+
+- hosts: db_servers
+  become: true
+  roles:
+    - db_servers
 
 
 - hosts: web_servers
   become: true
   roles:
-
     - web_servers 
-
-
-
-- hosts: workstations
-  become: true
-  tasks:
-  
-  - name: install terraform
-    tags: terraform
-    unarchive: 
-      src: https://releases.hashicorp.com/terraform/0.12.28/terraform_0.12.28_linux_amd64.zip
-      dest: /usr/local/bin
-      owner: root
-      group: root
-      mode: 0644
-      remote_src: yes 
-    when: ansible_distribution == "RedHat"
-    
-
-
-- hosts: db_servers   
-  become: true
-  tasks:
-    
-  - name: install mariadb for RedHat
-    tags: Rmariadb
-    dnf:
-      name: mariadb 
-      state: latest
-    when: ansible_distribution == "RedHat"
-
-
-  - name: mariadb for Ubuntu
-    tags: Umariadb 
-    apt:
-      name: mariadb-server
-      state: latest
-    when: ansible_distribution == "Ubuntu"
-
-- hosts: file_servers
-  become: true
-  tasks:
-
-  - name: install samba for "RedHat" and "Ubuntu
-    tags: Samba
-    package:
-      name: samba
-    when: ansible_distribution in ["RedHat", "Ubuntu"]
-
-
-
-
-- hosts: web_servers
-  become: true
-  roles: 
-
-    - web_servers
-	
-
-
-
-
-
+  notify: httpd 

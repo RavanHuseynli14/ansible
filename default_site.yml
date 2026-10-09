@@ -1,0 +1,26 @@
+---
+- hosts: web_servers
+  become: true
+  pre_tasks:
+
+    - name: docker install for web_servers
+      dnf:
+        name: podman-docker-7:5.6.0-4.el10_1.noarch
+        state: present
+
+    - name: restart docker service
+      service:
+        name: podman.socket
+        state: restarted
+        enabled: true
+
+- hosts: web_servers
+  become: true
+  tasks:
+    - name: docker container for a default site
+      tags: default_site
+      docker_container:
+        name: default_site
+        image: docker.io/ravan014/index_image:1.0
+        ports:
+          - "8080:80"
